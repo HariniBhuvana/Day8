@@ -5,6 +5,7 @@ public class Employee {
 	private String employeeName;
 	private double employeeSalary;
 	private String employeeDept;
+	
 	public Employee(int employeeId, String employeeName, double employeeSalary, String employeeDept) {
 		super();
 		this.employeeId = employeeId;
@@ -14,7 +15,6 @@ public class Employee {
 	}
 	public Employee() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public int getEmployeeId() {
 		return employeeId;

@@ -11,13 +11,17 @@ private List<Employee> employees=new ArrayList<>();
 
 @Override
 public List<Employee> findAllEmployees() {
-	// TODO Auto-generated method stub
-	return null;
+	return employees;
 }
 
 @Override
 public Employee findEmployeeById(int employeeId) {
-	// TODO Auto-generated method stub
+	
+	for(Employee employee:employees) {
+		
+		if(employee.getEmployeeId()==employeeId)
+			return employee;
+	}
 	return null;
 }
 
@@ -28,20 +32,36 @@ public boolean deleteEmployee(int employeeId) {
 		if(employee.getEmployeeId()==employeeId) {
 			employees.remove(employee);
 			return true;
-			
-		}
+			}
+
 	}
 	return false;
 }
 
 public boolean addEmployee(Employee employee) {
-	// TODO Auto-generated method stub
-	return employees.add(employee);
+	if (employees.size() == 0) {
+		return employees.add(employee);
+	}
+	for (Employee emp : employees) {
+		if (employee.getEmployeeId() == emp.getEmployeeId()) {
+			return false;
+		} else {
+			return employees.add(employee);
+		}
+	}
+	return false;
 }
 
 @Override
 public Employee updateEmployee(Employee employee) {
-	// TODO Auto-generated method stub
+	for (Employee employ : employees) {
+		if (employ.getEmployeeId() == employee.getEmployeeId()) {
+			employ.setEmployeeName(employee.getEmployeeName());
+			employ.setEmployeeSalary(employee.getEmployeeSalary());
+			employ.setEmployeeDept(employee.getEmployeeDept());
+		}
+		return employ;
+	}
 	return null;
 }
 

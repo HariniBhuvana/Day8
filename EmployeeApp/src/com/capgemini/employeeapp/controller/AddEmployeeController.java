@@ -1,6 +1,10 @@
 package com.capgemini.employeeapp.controller;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,30 +15,44 @@ import com.capgemini.employeeapp.dao.EmployeeDao;
 import com.capgemini.employeeapp.dao.impl.EmployeeDaoImpl;
 import com.capgemini.employeeapp.model.Employee;
 
+import sun.misc.Request;
 
-@WebServlet("/AddEmployeeController")
+@WebServlet("/addEmployeeController")
 public class AddEmployeeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    private EmployeeDao employeeDao=new EmployeeDaoImpl();
-    public AddEmployeeController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private EmployeeDao employeeDao;
+	private ServletContext context;
+
+	public AddEmployeeController() {
+		super();
+		employeeDao = new EmployeeDaoImpl();
+	}
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		context = config.getServletContext();
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.setContentType("text/html");
-		int empId = Integer.parseInt(request.getParameter("empId"));
 
+		int empId = Integer.parseInt(request.getParameter("empId"));
 		String empName = (request.getParameter("empName"));
 		double empSalary = Double.parseDouble(request.getParameter("empSalary"));
 		String empDept = (request.getParameter("empDept"));
-		Employee employee = new Employee(empId,empName,empSalary,empDept);
-		if(employeeDao.addEmployee(employee)){
-		}
-		else
-		{
-			
+
+		context.setAttribute("employeeDao", employeeDao);
+
+		Employee employee = new Employee(empId, empName, empSalary, empDept);
+//		dispatcher = null;
+		if (employeeDao.addEmployee(employee)) {
+			response.sendRedirect("getAllEmployees");
+		} else {
+			RequestDispatcher dispatcher;
+			dispatcher = request.getRequestDispatcher("error.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 
